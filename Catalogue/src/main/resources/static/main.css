@@ -1,0 +1,106 @@
+/* Общие стили для страницы */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Контейнер для карточек товаров */
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Стили для каждой карточки товара */
+.product-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    height: 450px; /* Устанавливаем фиксированную высоту */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-align: center;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+/* Изображение товара */
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Информация о товаре */
+.product-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.product-description {
+    font-size: 14px;
+    color: #000000;
+    margin: 10px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Ограничиваем количество строк */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Добавляем многоточие, если текст не помещается */
+}
+
+.product-rating {
+    font-size: 14px;
+    color: #ff9800;
+    margin-bottom: 10px;
+}
+
+.reviews {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Цена товара */
+.product-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2d2d2d;
+}
+
+/* Кнопка "Купить" */
+.buy-button {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.buy-button:hover {
+    background-color: #e64a19;
+}
+

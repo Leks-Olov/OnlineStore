@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store</title>
+    <link rel="stylesheet" href="/header.css">
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">My Store</div>
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="search-bar">
+            <input type="text" placeholder="Search for products..." id="search-input">
+            <button id="search-button">Search</button>
+        </div>
+    </header>
+
+    <nav class="side-menu" id="side-menu">
+        <ul>
+            <li><a href="#">Category 1</a></li>
+            <li><a href="#">Category 2</a></li>
+            <li><a href="#">Category 3</a></li>
+            <li><a href="#">Category 4</a></li>
+        </ul>
+    </nav>
+
+    <div class="overlay" id="menu-overlay"></div>
+
+    <main>
+        <div class="product-container">
+            <!-- Карточка товара -->
+            <div class="product-card" data-th-each="product : ${products}">
+                <img src="${product.img}" alt="Товар" class="product-image">
+                <div class="product-info">
+                    <h3 data-th-text="${product.title}" class="product-title"></h3>
+                    <p data-th-text="${product.info}" class="product-description"></p>
+
+                    <div class="product-rating">
+                        <span th:text="|★${product.averRating()}|" class="rating"></span>
+                        <span class="reviews"
+                              th:text="|(${product.countReview()} ${product.countReview() == 1 ? 'отзыв' : 'отзывов'})|">
+                        </span>
+                    </div>
+                    <p th:text="|${product.price} рублей|" class="product-price"></p>
+                    <button class="buy-button">Купить</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/script.js"></script>
+</body>
+</html>
