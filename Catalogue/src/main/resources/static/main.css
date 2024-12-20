@@ -12,7 +12,6 @@ body {
     flex-wrap: wrap;
     justify-content: space-around;
     padding: 20px;
-    gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -22,8 +21,8 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    height: 450px; /* Устанавливаем фиксированную высоту */
+    width: 200px;
+    height: 400px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -63,10 +62,10 @@ body {
     color: #000000;
     margin: 10px 0;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* Ограничиваем количество строк */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis; /* Добавляем многоточие, если текст не помещается */
+    text-overflow: ellipsis;
 }
 
 .product-rating {

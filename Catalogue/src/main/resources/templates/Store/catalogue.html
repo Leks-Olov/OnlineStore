@@ -32,7 +32,7 @@
         <div class="product-container">
             <!-- Карточка товара -->
             <div class="product-card" data-th-each="product : ${products}">
-                <img src="${product.img}" alt="Товар" class="product-image">
+                <img th:src="@{/img/{filename}(filename = ${product.img})}" alt="Товар" class="product-image">
                 <div class="product-info">
                     <h3 data-th-text="${product.title}" class="product-title"></h3>
                     <p data-th-text="${product.info}" class="product-description"></p>
