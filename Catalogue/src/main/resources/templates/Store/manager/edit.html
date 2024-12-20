@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Новый товар</title>
+    <title>Редактирование товара &laquo;[[${product.title}]]</title>
 </head>
 <body>
 <a data-th-href="@{/Store/manager/cabinet}">&larr; В кабинет менеджера</a>
-<h1>Новый товар</h1>
-<form method="post" enctype="multipart/form-data" data-th-action="@{/Store/manager/create}">
+<h1>Редактирование товара &laquo;[[${product.title}]]</h1>
+<form method="post" enctype="multipart/form-data" data-th-action="@{/Store/manager/{productId}/edit(productId = ${product.id})}">
 
     <label>
         Название:<br>
@@ -26,7 +26,7 @@
         <input type="text" name="price" data-th-value="${payload?.price}">
     </label><br>
 
-    <button type="submit">Создать</button>
+    <button type="submit">Изменить</button>
 </form>
 </body>
 </html>

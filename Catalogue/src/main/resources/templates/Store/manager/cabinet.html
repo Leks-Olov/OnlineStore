@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Cabinet</title>
+    <link rel="stylesheet" href="/manager/cabinet.css">
+</head>
+<body>
+<header class="header">
+    <h1>Кабинет менеджера</h1>
+    <a data-th-href="@{/Store/manager/create}" class="add-button">Добавить Товар</a>
+</header>
+
+<main>
+    <div class="product-container">
+        <div class="product-card" data-th-each="product : ${products}">
+            <img th:src="@{/img/{filename}(filename = ${product.img})}" alt="Товар" class="product-image">
+            <h3 data-th-text="${product.title}" class="product-title"></h3>
+            <div class="product-actions">
+                <a data-th-href="@{/Store/manager/{productId}/edit(productId = ${product.id})}" class="edit-button">Изменить</a>
+                <form method="post" data-th-action="@{/Store/manager/{productId}/delete(productId = ${product.id})}" class="delete-form">
+                    <button type="submit" class="delete-button">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

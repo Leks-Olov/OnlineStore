@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,9 +21,6 @@ public class ProductsController {
 
     private final ProductService productService;
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
     @GetMapping("/")
     public String catalogue() {
         return "redirect:/Store/catalogue";
@@ -33,7 +28,7 @@ public class ProductsController {
 
     @GetMapping("catalogue")
     public String getProductsList(Model model) {
-        model.addAttribute("products", productService.findAllProducts());
+        model.addAttribute("products", this.productService.findAllProducts());
         return "Store/catalogue";
     }
 
@@ -43,26 +38,16 @@ public class ProductsController {
     }
 
     @PostMapping("manager/create")
-    public String createProduct(Model model, NewProductPayload payload,
-                                @RequestParam("file")MultipartFile file
-    ) throws IOException {
-        model.addAttribute("payload", payload);
+    public String createProduct(NewProductPayload payload){
+        this.productService.createProduct(payload.title(), payload.info(), payload.file(),
+                payload.price());
 
-        if (!file.isEmpty()) {
-            File uploadDir = new File(uploadPath);
+        return "redirect:/Store/manager/cabinet";
+    }
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-
-            String uuidFile=UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            this.productService.createProduct(payload.title(), payload.info(), resultFilename, payload.price());
-        }
-
-        return "redirect:/Store/catalogue";
+    @GetMapping("manager/cabinet")
+    public String getManagerCabinetPage(Model model) {
+        model.addAttribute("products", this.productService.findAllProducts());
+        return "Store/manager/cabinet";
     }
 }

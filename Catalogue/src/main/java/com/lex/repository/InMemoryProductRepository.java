@@ -3,10 +3,7 @@ package com.lex.repository;
 import com.lex.entity.Product;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
@@ -24,9 +21,19 @@ public class InMemoryProductRepository implements ProductRepository {
                 .max(Comparator.comparingInt(Product::getId))
                 .map(Product::getId)
                 .orElse(0) +1);
-
-        product.getReviews().add("Очень хорошо");
-        product.getRatings().add(4.5);
         this.products.add(product);
+    }
+
+    @Override
+    public Optional<Product> findByID(int productId) {
+        return this.products.stream()
+                .filter(product -> Objects.equals(productId, product.getId()))
+                .findFirst();
+    }
+
+    @Override
+    public void delete(Product product) {
+        Integer id = product.getId();
+        this.products.removeIf(i -> Objects.equals(id, i.getId()));
     }
 }

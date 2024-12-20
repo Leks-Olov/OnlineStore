@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store</title>
-    <link rel="stylesheet" href="/header.css">
-    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/catalogue/header.css">
+    <link rel="stylesheet" href="/catalogue/main.css">
 </head>
 <body>
     <header class="header">
@@ -15,6 +15,7 @@
             <input type="text" placeholder="Search for products..." id="search-input">
             <button id="search-button">Search</button>
         </div>
+        <a data-th-href="@{/Store/manager/cabinet}">Войти как менеджер</a>
     </header>
 
     <nav class="side-menu" id="side-menu">
