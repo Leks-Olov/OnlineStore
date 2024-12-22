@@ -2,6 +2,7 @@ package com.lex.service;
 
 import com.lex.entity.Product;
 import com.lex.repository.ProductRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -59,11 +60,9 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public void updateProduct(String title, String info, int price, MultipartFile file, Integer id) {
+    public void updateProduct(String title, String info, int price, Integer id) {
         this.productRepository.findByID(id)
                 .ifPresentOrElse(product -> {
-                    imageDelete(product.getImg());
-                    product.setImg(createImage(file));
                     product.setTitle(title);
                     product.setInfo(info);
                     product.setPrice(price);
@@ -73,16 +72,26 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public void imageDelete(String imgPath) {
+    public void updateProductFile(Integer id, MultipartFile file) {
+        this.productRepository.findByID(id)
+                .ifPresentOrElse(product -> {
+                    pathToFile(product.getImg()).delete();
+                    product.setImg(createImage(file));
+                }, () -> {
+                    throw new NoSuchElementException();
+                });
+    }
+
+    @Override
+    public File pathToFile(String imgPath) {
         File file = new File(uploadPath + "/" + imgPath);
-        file.delete();
+        return file;
+
     }
 
     @Override
     public void deleteProduct(Product product) {
-        imageDelete(product.getImg());
+        pathToFile(product.getImg()).delete();
         this.productRepository.delete(product);
     }
-
-
 }

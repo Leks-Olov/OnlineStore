@@ -3,30 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Редактирование товара &laquo;[[${product.title}]]</title>
+    <link rel="stylesheet" href="/manager/modal_window.css">
 </head>
 <body>
-<a data-th-href="@{/Store/manager/cabinet}">&larr; В кабинет менеджера</a>
-<h1>Редактирование товара &laquo;[[${product.title}]]</h1>
-<form method="post" enctype="multipart/form-data" data-th-action="@{/Store/manager/{productId}/edit(productId = ${product.id})}">
 
-    <label>
-        Название:<br>
-        <input type="text" name="title" data-th-value="${payload?.title}">
-    </label><br>
-    <label>
-        Описание:<br>
-        <textarea name="info" data-th-text="${payload?.info}"></textarea>
-    </label><br>
-    <label>
-        Ссылка на изображение:<br>
-        <input type="file" name="file">
-    </label><br>
-    <label>
-        Цена:<br>
-        <input type="text" name="price" data-th-value="${payload?.price}">
-    </label><br>
+<div class="container">
+    <div class="image-preview">
+        <img id="imagePreview" th:src="@{/img/{filename}(filename = ${product.img})}" alt="Загруженное изображение">
+    </div>
 
-    <button type="submit">Изменить</button>
-</form>
+    <form method="post" enctype="multipart/form-data" data-th-action="@{/Store/manager/{productId}/edit(productId = ${product.id})}">
+
+        <label>
+            Название:<br>
+            <input type="text" name="title" data-th-value="${payload != null ? payload.title : product.title}">
+            <div class="error" th:if="${errors != null and errors.containsKey('title')}">
+                <p th:text="${errors['title']}"></p>
+            </div>
+        </label><br>
+
+        <label>
+            Описание:<br>
+            <textarea name="info" data-th-text="${payload != null ? payload.info : product.info}"></textarea>
+            <div class="error" th:if="${errors != null and errors.containsKey('info')}">
+                <p th:text="${errors['info']}"></p>
+            </div>
+        </label><br>
+
+        <label>
+            Ссылка на изображение:<br>
+            <input type="file" name="file">
+            <div class="error" th:if="${errors != null and errors.containsKey('file')}">
+                <p th:text="${errors['file']}"></p>
+            </div>
+        </label><br>
+
+        <label>
+            Цена:<br>
+            <input type="text" name="price" data-th-value="${payload != null ? payload.price : product.price}">
+            <div class="error" th:if="${errors != null and errors.containsKey('price')}">
+                <p th:text="${errors['price']}"></p>
+            </div>
+        </label><br>
+
+        <button type="submit">Изменить</button>
+
+        <form method="get" data-th-action="@{/Store/manager/cabinet}">
+            <button type="submit">Отменить</button>
+        </form>
+    </form>
+</div>
+
+<script src="/manager/imgLoad.js"></script>
 </body>
 </html>

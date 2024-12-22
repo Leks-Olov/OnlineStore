@@ -2,17 +2,18 @@ package com.lex.controller;
 
 import com.lex.payload.NewProductPayload;
 import com.lex.service.ProductService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
-import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,10 +39,18 @@ public class ProductsController {
     }
 
     @PostMapping("manager/create")
-    public String createProduct(NewProductPayload payload){
-        this.productService.createProduct(payload.title(), payload.info(), payload.file(),
-                payload.price());
+    public String createProduct(@Valid NewProductPayload payload,
+                                BindingResult bindingResult, Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("payload", payload);
+            model.addAttribute("errors", bindingResult.getFieldErrors()
+                    .stream()
+                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)));
+            return "Store/manager/create";
+        }
 
+        this.productService.createProduct(payload.title(), payload.info(), payload.file(), payload.price());
         return "redirect:/Store/manager/cabinet";
     }
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница товара</title>
+    <link rel="stylesheet" href="/manager/product.css">
+</head>
+<body>
+<div class="product-page">
+    <div class="product-info">
+        <div class="product-image">
+            <img th:src="@{/img/{filename}(filename = ${product.img})}" alt="Изображение товара">
+        </div>
+        <div class="product-details">
+            <h1 class="product-title" data-th-text="${product.title}" ></h1>
+            <p class="product-price" data-th-text="${product.price}"></p><span>₽</span>
+            <p class="product-description" data-th-text="${product.info}"></p>
+            <div class="product-rating">
+                <span class="rating-stars" th:text="|★${product.averRating()}|"></span>
+                <span class="rating-count"
+                      th:text="|(${product.countReview()} ${product.countReview() == 1 ? 'отзыв' : 'отзывов'})|">
+                </span>
+            </div>
+            <button class="add-to-cart">Купить</button>
+        </div>
+    </div>
+    <div class="reviews-section">
+        <h2>Отзыв о товаре</h2>
+        <div class="review-form">
+            <textarea placeholder="Напишите ваш отзыв..."></textarea>
+            <button class="submit-review">Отправить отзыв</button>
+        </div>
+        <h2>Отзывы</h2>
+        <div class="reviews">
+            <div class="review" data-th-each="review : ${reviews}">
+                <p><strong>Noname</strong></p>
+                <p data-th-text="review"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
