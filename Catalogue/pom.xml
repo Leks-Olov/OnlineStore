@@ -53,6 +53,12 @@
 			<version>3.4.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.lex_olov</groupId>
+			<artifactId>manager-service</artifactId>
+			<version>24.1.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,34 +1,37 @@
 package com.lex.controller;
 
+import com.lex.client.ProductsRestClient;
 import com.lex.entity.Product;
-import com.lex.payload.UpdateProductPayload;
-import com.lex.service.ProductService;
+import com.lex.controller.payload.UpdateProductPayload;
 
-import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(("Store/manager/{productId:\\d+}"))
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductsRestClient productsRestClient;
+
+    private final MessageSource messageSource;
 
     @ModelAttribute("product")
     public Product product(@PathVariable("productId") int productId) {
-        return this.productService.findProduct(productId)
+        return this.productsRestClient.findProduct(productId)
                 .orElseThrow(() -> new NoSuchElementException("manager.errors.product.not_found"));
     }
 
     @GetMapping
-    public String getProductPage(@ModelAttribute(name = "product", binding = false) Product product,
+    public String getProduct(@ModelAttribute(name = "product", binding = false) Product product,
                                  Model model) {
         model.addAttribute("product", product);
         model.addAttribute("reviews", product.getReviews());
@@ -42,29 +45,31 @@ public class ProductController {
 
     @PostMapping("edit")
     public String updateProduct(@ModelAttribute(name = "product", binding = false) Product product,
-                                @Valid UpdateProductPayload payload,
-                                BindingResult bindingResult, Model model
+                                UpdateProductPayload payload, Model model
     ) {
-        if (!payload.file().isEmpty() && payload.file() != null && !bindingResult.getFieldErrors().contains("file")) {
-            this.productService.updateProductFile(product.getId(), payload.file());
-        }
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("payload", payload);
-            model.addAttribute("errors", bindingResult.getFieldErrors()
-                    .stream()
-                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)));
-            return "Store/manager/edit";
-
-        } else {
-            this.productService.updateProduct(payload.title(), payload.info(),
-                    payload.price(), product.getId());
+        try {
+            this.productsRestClient.updateProduct(payload, product.getId());
             return "redirect:/Store/manager/cabinet";
+        } catch (BadRequestException exception) {
+            model.addAttribute("payload", payload);
+            model.addAttribute("errors", exception.getErrors());
+            return "Store/manager/edit";
         }
     }
 
     @PostMapping("delete")
     public String deleteProduct(@ModelAttribute("product") Product product) {
-        this.productService.deleteProduct(product);
+        this.productsRestClient.deleteProduct(product.getId());
         return "redirect:/Store/manager/cabinet";
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleNoSuchElementException(NoSuchElementException exception, Model model,
+                                               HttpServletResponse response, Locale locale) {
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        model.addAttribute("error",
+                this.messageSource.getMessage(exception.getMessage(), new Object[0],
+                        exception.getMessage(), locale));
+        return "Store/errors/404";
     }
 }

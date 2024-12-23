@@ -11,7 +11,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>Catalogue</module>
+        <module>manager-service</module>
     </modules>
+
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
